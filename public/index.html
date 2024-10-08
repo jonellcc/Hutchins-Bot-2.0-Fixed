@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f0f8ff;
+            color: #333;
+            font-family: Arial, sans-serif;
+            position: relative;
+            min-height: 100vh;
+            transition: background-color 1s ease, color 1s ease;
+        }
+        body.dark {
+            background-color: #333;
+            color: #f0f8ff;
+        }
+        .container {
+            padding-bottom: 50px;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.5;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 1s ease, color 1s ease;
+        }
+        .card.dark {
+            background-color: #444;
+            color: #f0f8ff;
+        }
+        .console-button {
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-lightblue {
+            background-color: #add8e6;
+            color: #333;
+        }
+        .btn-lightblue:hover {
+            background-color: #87cefa;
+        }
+        .response-time {
+            font-weight: bold;
+        }
+        .toggle-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            transition: background-color 0.3s ease;
+        }
+        .toggle-btn:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Bot Dashboard</h1>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Basic Bot Info</h5>
+                <p>Bot Name: <span id="botName"></span></p>
+                <p>Prefix: <span id="prefix"></span></p>
+                <p>Owner Name: <span id="ownerName"></span></p>
+                <p>FCA Module: <span class="FCA" id="FCA"></span></p>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Statistics</h5>
+                <p>Bot Commands: <span id="commandsCount"></span></p>
+                <p>Bot Events: <span id="eventsCount"></span></p>
+                <p>Threads: <span id="threadsCount"></span></p>
+                <p>Users: <span id="usersCount"></span></p>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">System Info</h5>
+                <p>Uptime: <span id="uptime"></span></p>
+                <p>OS: <span id="os"></span></p>
+                <p>System Latency: <span class="response-time" id="responseTime"></span></p>
+                <p>RAM: <span class="ram" id="ram"></span> Megabytes</p>
+                <p>CPU: <span class="cpu" id="cpu"></span>% Used</p>
+                <p>Host ID: <span class="host" id="host"></span></p>
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-lightblue" data-toggle="modal" data-target="#restartModal">Restart Bot</button>
+            <button class="btn btn-lightblue" onclick="window.location.href='/console'">Open Console</button>
+        </div>
+    </div>
+    <div class="watermark" id="watermark">Bot Admin: Jonell Magallanes</div>
+
+    <div class="modal fade" id="restartModal" tabindex="-1" role="dialog" aria-labelledby="restartModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restartModalLabel">Restart Bot</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Enter passcode to restart the bot:</p>
+                    <input type="password" id="passcodeInput" class="form-control" placeholder="Passcode">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="restartButton">Restart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="toggle-btn" id="toggleMode">🌞</button>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('updateStats', (data) => {
+            document.getElementById('botName').innerText = data.botName;
+            document.getElementById('prefix').innerText = data.prefix;
+            document.getElementById('ownerName').innerText = data.ownerName;
+
+                        document.getElementById('os').innerText = data.os;
+        document.getElementById('commandsCount').innerText = data.commandsCount;
+            document.getElementById('eventsCount').innerText = data.eventsCount;
+            document.getElementById('threadsCount').innerText = data.threadsCount;
+            document.getElementById('usersCount').innerText = data.usersCount;
+            document.getElementById('ram').innerText = data.ram;
+            document.getElementById('cpu').innerText = data.cpu;
+            document.getElementById('host').innerText = data.host;
+            document.getElementById('uptime').innerText = data.uptime;            
+
+            document.getElementById('FCA').innerText = data.FCA;
+            document.getElementById('responseTime').innerText = data.responseTime;
+            document.getElementById('watermark').innerText = `Bot Admin: ${data.ownerName}`;
+        });
+
+        document.getElementById('restartButton').addEventListener('click', () => {
+            const passcode = document.getElementById('passcodeInput').value;
+            socket.emit('restartBot', passcode);
+        });
+
+        socket.on('restartSuccess', (message) => {
+            alert(message);
+            location.reload();
+        });
+
+        socket.on('restartFailed', (message) => {
+            alert(message);
+        });
+
+        document.getElementById('toggleMode').addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const isDarkMode = document.body.classList.contains('dark');
+            const emoji = isDarkMode ? "🌙" : "🌞";
+            document.getElementById('toggleMode').innerHTML = emoji;
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.toggle('dark', isDarkMode);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Console - Hutchin Bot</title>
+    <style>
+        body {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+        .console-output {
+            height: 300px;
+            overflow-y: auto;
+            background-color: #212529;
+            border: 1px solid #495057;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .input-area {
+            margin-bottom: 10px;
+        }
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.5;
+            color: black;
+            font-size: 12px;
+        }
+        .response-time {
+            color: #ffc107;
+        }
+        .fade {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+        .fade.in {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Hutchin Bot Console</h1>
+        <div class="console-output" id="consoleOutput"></div>
+        <div class="input-area">
+            <input type="text" id="commandInput" class="form-control" placeholder="Type your command here..." />
+            <button id="executeButton" class="btn btn-light mt-2">Execute</button>
+            <button id="stopButton" class="btn btn-warning mt-2">Stop</button>
+            <button id="exitButton" class="btn btn-danger mt-2">Exit</button>
+        </div>
+        <div class="response-time" id="responseTime"></div>
+        <div class="watermark">Powered By Hutchin Bot 2.0</div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const commandInput = document.getElementById('commandInput');
+        const executeButton = document.getElementById('executeButton');
+        const stopButton = document.getElementById('stopButton');
+        const exitButton = document.getElementById('exitButton');
+        const consoleOutput = document.getElementById('consoleOutput');
+        const responseTimeDisplay = document.getElementById('responseTime');
+
+        let commandRunning = false;
+
+        executeButton.onclick = () => {
+            const command = commandInput.value.trim();
+            if (command) {
+                appendOutput(`Executing: ${command}`, 'blue');
+                commandRunning = true;
+                socket.emit('executeCommand', command);
+                commandInput.value = '';
+            }
+        };
+
+        stopButton.onclick = () => {
+            if (commandRunning) {
+                socket.emit('stopCommand');
+                appendOutput('Stopping current command...', 'yellow');
+                commandRunning = false;
+            }
+        };
+
+        exitButton.onclick = () => {
+            socket.emit('exitConsole');
+        };
+
+        socket.on('commandOutput', (data) => {
+            appendOutput(data.output, data.color);
+            smoothScroll();
+            const responseTime = data.output.match(/\(Response time: (\d+) ms\)/);
+            if (responseTime) {
+                responseTimeDisplay.innerText = `Response Time: ${responseTime[1]} ms`;
+            }
+        });
+
+        socket.on('redirectHome', () => {
+            window.location.href = '/';
+        });
+
+        function appendOutput(text, color) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            div.style.color = color;
+            div.classList.add('fade');
+            consoleOutput.appendChild(div);
+            setTimeout(() => div.classList.add('in'), 2);
+        }
+
+        function smoothScroll() {
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+    </script>
+</body>
+</html>
