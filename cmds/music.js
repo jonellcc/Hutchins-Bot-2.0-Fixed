@@ -33,17 +33,21 @@ module.exports = {
 
             await api.editMessage(`⏱️ | Music Title has been Found: "${title}". Downloading...`, findingMessage.messageID);
 
-            const response = await axios.get(`https://jonellprojectccapisexplorer.onrender.com/api/music?url=${url}`);
-            const { link } = response.data.data;
+            
+            const response = await axios.get(`https://ccprojectsjonellproject.vercel.app/api/dl?url=${url}`);
+            const downloadLink = response.data.data.downloadLink.url;
 
             const filePath = path.resolve(__dirname, 'cache', `${Date.now()}-${title}.mp3`);
-
             const fileStream = fs.createWriteStream(filePath);
 
+            
             const responseStream = await axios({
                 method: 'get',
-                url: link,
-                responseType: 'stream'
+                url: downloadLink,
+                responseType: 'stream',
+                headers: {
+                    'User-Agent': 'Mozilla/5.0'
+                }
             });
 
             responseStream.data.pipe(fileStream);
