@@ -52,7 +52,7 @@ module.exports = {
         if (!target[0]) return api.sendMessage("Please provide your question.\n\nExample: ai what is the solar system?", threadID, messageID);
 
         const ask = encodeURIComponent(target.join(" "));
-        const mainApiUrl = `https://jonellprojectccapisexplorer.onrender.com/apib/gptconvo?ask=${ask}&id=${id}`;
+        const mainApiUrl = `https://jonellprojectccapisexplorer.onrender.com/api/gptconvo?ask=${ask}&id=${id}`;
         const backupApiUrl = `https://gpt4o-hshs.onrender.com/gpt4o?ask=${ask}&id=${id}`;
         const apiUrl = apiState.useBackupApi ? backupApiUrl : mainApiUrl;
 
