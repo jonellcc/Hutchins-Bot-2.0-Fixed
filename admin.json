@@ -1,16 +1,16 @@
 {
-  "prefix": "?",
+  "prefix": "!",
   "adminUIDs": [
-    "100036956043695"
+   "your uid"
   ],
   "moderatorUIDs": [
-    "100036956043695",
+    "your uid",
     "",
     ""
   ],
-  "botName": "Harold Hutchins",
-  "ownerName": "Jonell Magallanes",
-  "facebookLink": "https://www.facebook.com/100036956043695",
+  "botName": "bot name",
+  "ownerName": "Your name",
+  "facebookLink": "fb link",
   "resend": false,
   "notilogs": true,
   "appstate": "./appstate.json",
@@ -18,8 +18,8 @@
   "restartTime": 50,
   "FCA": "hut-chat-api",
   "loginpanel": {
-    "user": "jonell",
-    "password": "testhehe",
-    "passcode": "2005"
+    "user": "your username in dashboard",
+    "password": "password your dashboard",
+    "passcode": "12345"
   }
 }
