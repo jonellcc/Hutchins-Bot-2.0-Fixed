@@ -20,7 +20,7 @@ onLaunch: async ({ api, event }) => {
   const attachmentUrl = event.messageReply.attachments[0].url;
 
   try {
-    const apiUrl = `http://de01.uniplex.xyz:5611/api/upload?url=${attachmentUrl}`;
+    const apiUrl = `https://ccprojectapis.ddns.net/api/gdrive?url=${attachmentUrl}`;
 
         api.editMessage("Uploading Google Drive......", pro.messageID, event.threadID, event.messageID);
     const response = await axios.get(apiUrl);
