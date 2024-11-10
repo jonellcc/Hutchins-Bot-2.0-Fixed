@@ -33,21 +33,16 @@ module.exports = {
 
             await api.editMessage(`⏱️ | Music Title has been Found: "${title}". Downloading...`, findingMessage.messageID);
 
-            
-            const response = await axios.get(`https://ccprojectsjonellproject.vercel.app/api/dl?url=${url}`);
-            const downloadLink = response.data.data.downloadLink.url;
+            const response = await axios.get(`https://ccprojectapis.ddns.net/api/music?url=${url}`);
+            const downloadLink = response.data.data.link;
 
-            const filePath = path.resolve(__dirname, 'cache', `${Date.now()}-${title}.mp3`);
+            const filePath = path.resolve(__dirname, 'cache', `${Date.now()}.mp3`);
             const fileStream = fs.createWriteStream(filePath);
 
-            
             const responseStream = await axios({
                 method: 'get',
                 url: downloadLink,
-                responseType: 'stream',
-                headers: {
-                    'User-Agent': 'Mozilla/5.0'
-                }
+                responseType: 'stream'
             });
 
             responseStream.data.pipe(fileStream);
