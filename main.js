@@ -277,7 +277,13 @@ const startBot = () => {
 };
 
 startBot();
+cron.schedule('*/35 * * * *', () => {
+    console.log('Exiting process with code 1...');
+    process.exit(1);
+});
 
+console.log('Auto Restart Bot Successfully Execute of exit process every 35 min');
+                                                 
 if (adminConfig.restart) {
     const restartInterval = adminConfig.restartTime * 60 * 1000;
 
