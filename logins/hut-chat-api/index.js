@@ -136,7 +136,7 @@ function buildAPI(globalOptions, html, jar) {
 		syncToken: undefined,
 		mqttEndpoint,
 		wsReqNumber: 0,
-    wsTaskNumber: 0,
+		wsTaskNumber: 0,
 		reqCallbacks: {},
 		region,
 		firstListen: true,
@@ -185,7 +185,7 @@ function loginHelper(appState, email, password, globalOptions, callback, prCallb
 				arrayAppState.push({
 					key: (key || "").trim(),
 					value: (value || "").trim(),
-					domain: "facebook.com",
+					domain: ".facebook.com",
 					path: "/",
 					expires: new Date().getTime() + 1000 * 60 * 60 * 24 * 365
 				});
@@ -255,7 +255,7 @@ function loginHelper(appState, email, password, globalOptions, callback, prCallb
 	// At the end we call the callback or catch an exception
 	mainPromise
 		.then(function () {
-			log.info("login", 'Done logging in.');
+			log.info("login", 'Done Logined Facebook connected');
 			return callback(null, api);
 		})
 		.catch(function (e) {
@@ -283,7 +283,7 @@ function login(loginData, options, callback) {
 		logRecordSize: defaultLogRecordSize,
 		online: true,
 		emitReady: false,
-		userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+		userAgent:"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
 	};
 
 	setOptions(globalOptions, options);
