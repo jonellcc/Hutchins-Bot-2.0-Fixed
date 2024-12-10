@@ -38,6 +38,7 @@
     "pastebin-api": "^7.0.0",
     "proxy-chain": "^2.5.3",
     "puppeteer-core": "^23.3.1",
+    "hut-chat-api": "^1.0.4",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-recaptcha": "^3.6.8",
     "request": "^2.88.2",
