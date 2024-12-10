@@ -33,7 +33,8 @@ function getRandomProxy() {
 }
 proxy = getRandomProxy();
 const adminConfig = JSON.parse(fs.readFileSync("admin.json", "utf8"));
-const login = require(`./logins/${adminConfig.FCA}/index.js`);
+//const login = require(`./logins/${adminConfig.FCA}/index.js`);
+const login = require("hut-chat-api");
 const prefix = adminConfig.prefix;
 const threadsDB = JSON.parse(fs.readFileSync("./database/threads.json", "utf8") || "{}");
 const usersDB = JSON.parse(fs.readFileSync("./database/users.json", "utf8") || "{}");
