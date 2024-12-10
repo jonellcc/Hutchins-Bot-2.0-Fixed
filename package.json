@@ -34,6 +34,7 @@
     "is-hexcolor": "^1.0.0",
     "moment-timezone": "^0.5.45",
     "node-cron": "^3.0.3",
+    "@google/generative-ai": "^0.21.0",
     "pastebin-api": "^7.0.0",
     "proxy-chain": "^2.5.3",
     "puppeteer-core": "^23.3.1",
